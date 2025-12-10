@@ -54,8 +54,8 @@ export const useLenis = () => {
           const currentScroll = window.scrollY;
           const difference = Math.abs(targetScroll - currentScroll);
 
-          // Only snap if we're reasonably close (within 30% of viewport height)
-          if (difference < window.innerHeight * 0.3) {
+          // Snap if not already perfectly aligned (within 5px tolerance)
+          if (difference > 5) {
             isSnapping = true;
             lenis.scrollTo(closestSection as HTMLElement, {
               duration: 1.2,
