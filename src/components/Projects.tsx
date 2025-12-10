@@ -3,25 +3,25 @@ import { ArrowUpRight } from "lucide-react";
 const projects = [
   {
     title: "distributed cache",
-    description: "high-performance caching layer for microservices",
+    description: "high-performance caching layer for microservices with automatic sharding and failover",
     stack: ["go", "redis", "grpc"],
     link: "#",
   },
   {
     title: "auth gateway",
-    description: "zero-trust authentication service with oauth2 support",
+    description: "zero-trust authentication service with oauth2 and mfa support",
     stack: ["rust", "postgresql", "jwt"],
     link: "#",
   },
   {
     title: "static site generator",
-    description: "minimal markdown-based static site builder",
+    description: "minimal markdown-based static site builder with hot reload",
     stack: ["typescript", "node", "markdown"],
     link: "#",
   },
   {
     title: "monitoring dashboard",
-    description: "real-time metrics visualization for infrastructure",
+    description: "real-time metrics visualization for infrastructure health",
     stack: ["react", "d3", "websockets"],
     link: "#",
   },
@@ -29,38 +29,38 @@ const projects = [
 
 const Projects = () => {
   return (
-    <section id="projects" className="py-20">
+    <section id="projects" className="py-24 border-t border-border">
       <div className="container">
-        <h2 className="text-2xl mb-12">
-          projects
-        </h2>
+        <h2 className="text-2xl mb-4">projects</h2>
+        <p className="text-muted-foreground mb-12 max-w-xl">
+          things we've built together — from internal tools to open source contributions.
+        </p>
         
-        <div className="space-y-1">
-          {projects.map((project, index) => (
+        <div className="grid md:grid-cols-2 gap-4">
+          {projects.map((project) => (
             <a
               key={project.title}
               href={project.link}
-              className="group block py-5 border-b border-border transition-colors duration-200 hover:bg-secondary/30 -mx-4 px-4 rounded-lg"
+              className="group block p-6 rounded-xl border border-border bg-card transition-all duration-300 hover:border-accent/30 hover:bg-secondary/50"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-medium">{project.title}</h3>
-                    <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 -translate-y-1 translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0" />
-                  </div>
-                  <p className="text-sm text-muted-foreground">{project.description}</p>
-                </div>
-                
-                <div className="flex gap-2 flex-shrink-0">
-                  {project.stack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="text-xs text-muted-foreground px-2 py-1 rounded-md bg-secondary"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <h3 className="font-medium text-lg">{project.title}</h3>
+                <ArrowUpRight className="w-5 h-5 text-muted-foreground opacity-0 transition-all duration-200 group-hover:opacity-100" />
+              </div>
+              
+              <p className="text-sm text-muted-foreground mb-6">
+                {project.description}
+              </p>
+              
+              <div className="flex flex-wrap gap-2">
+                {project.stack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="text-xs text-muted-foreground px-2 py-1 rounded-md bg-secondary"
+                  >
+                    {tech}
+                  </span>
+                ))}
               </div>
             </a>
           ))}

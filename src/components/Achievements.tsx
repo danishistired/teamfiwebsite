@@ -27,26 +27,31 @@ const achievements = [
 
 const Achievements = () => {
   return (
-    <section id="achievements" className="py-20">
+    <section id="achievements" className="py-24 border-t border-border">
       <div className="container">
-        <h2 className="text-2xl mb-12">
-          achievements
-        </h2>
+        <h2 className="text-2xl mb-4">achievements</h2>
+        <p className="text-muted-foreground mb-12 max-w-xl">
+          milestones and recognition we've collected along the way.
+        </p>
         
-        <div className="space-y-8">
+        <div className="grid gap-4">
           {achievements.map((item, index) => (
             <div
               key={index}
-              className="grid md:grid-cols-[100px_1fr] gap-4"
+              className="p-6 rounded-xl border border-border bg-card"
             >
-              <span className="text-sm text-muted-foreground">{item.year}</span>
-              
-              <div className="space-y-1">
-                <div className="flex items-baseline gap-3">
-                  <h3 className="font-medium">{item.event}</h3>
-                  <span className="text-xs text-accent">{item.position}</span>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <h3 className="font-medium text-lg">{item.event}</h3>
+                    <span className="text-xs text-accent px-2 py-0.5 rounded-full border border-accent/30 bg-accent/10">
+                      {item.position}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
                 </div>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+                
+                <span className="text-sm text-muted-foreground shrink-0">{item.year}</span>
               </div>
             </div>
           ))}
