@@ -22,6 +22,24 @@ const ScrollNavigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const targetId = href.substring(1);
+    const targetElement = document.getElementById(targetId) || document.querySelector(href);
+    
+    if (targetElement) {
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.scrollTo(targetElement, {
+          duration: 1.8,
+          easing: (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+        });
+      } else {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
   return (
     <nav
       className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
@@ -33,6 +51,7 @@ const ScrollNavigation = () => {
           <a
             key={item.label}
             href={item.href}
+            onClick={(e) => handleNavClick(e, item.href)}
             className="px-4 py-1.5 text-sm text-muted-foreground rounded-full transition-colors duration-200 hover:text-foreground hover:bg-secondary"
           >
             {item.label}

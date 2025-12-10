@@ -1,0 +1,6 @@
+.paint-container {
+  width: 100%;
+  height: 100vh; /* or 100% if you want it to fill parent */
+  display: block;
+  background: #000; /* black background to better see the effect */
+}
