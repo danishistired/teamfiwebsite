@@ -2,7 +2,7 @@ import { ChevronDown } from "lucide-react";
 
 const LandingHero = () => {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center relative">
+    <section className="snap-section flex flex-col items-center justify-center relative">
       <div className="text-center">
         <p className="text-lg text-muted-foreground mb-2">we are</p>
         <h1 className="text-5xl md:text-7xl lg:text-8xl">Team Fi</h1>

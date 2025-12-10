@@ -4,7 +4,7 @@ import { User } from "lucide-react";
 
 const TeamSection = () => {
   return (
-    <section id="team" className="py-24">
+    <section id="team" className="snap-section flex items-center py-24">
       <div className="container">
         <h2 className="text-2xl mb-12">our team</h2>
         

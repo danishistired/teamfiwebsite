@@ -27,7 +27,7 @@ const achievements = [
 
 const Achievements = () => {
   return (
-    <section id="achievements" className="py-24 border-t border-border">
+    <section id="achievements" className="snap-section flex items-center py-24 border-t border-border">
       <div className="container">
         <h2 className="text-2xl mb-4">achievements</h2>
         <p className="text-muted-foreground mb-12 max-w-xl">
