@@ -1,6 +1,6 @@
 const Contact = () => {
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" className="snap-section flex items-center py-20">
       <div className="container">
         <div className="max-w-lg">
           <h2 className="text-2xl mb-6">get in touch</h2>

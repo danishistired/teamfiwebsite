@@ -4,10 +4,13 @@ import TeamSection from "@/components/TeamSection";
 import Projects from "@/components/Projects";
 import Achievements from "@/components/Achievements";
 import Contact from "@/components/Contact";
+import { useLenis } from "@/hooks/useLenis";
 
 const Index = () => {
+  useLenis();
+
   return (
-    <div className="min-h-screen" id="home">
+    <div id="home">
       <ScrollNavigation />
       <main>
         <LandingHero />
@@ -16,7 +19,7 @@ const Index = () => {
         <Achievements />
         <Contact />
       </main>
-      <footer className="py-8 border-t border-border">
+      <footer className="snap-section flex items-center py-8 border-t border-border min-h-[30vh]">
         <div className="container">
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} Team Fi
