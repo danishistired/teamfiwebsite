@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, User } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import ProfileCard from "@/components/ProfileCard";
 
 const CaseyMorgan = () => {
   const member = {
@@ -46,37 +47,19 @@ const CaseyMorgan = () => {
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="aspect-square max-w-sm ml-auto rounded-2xl bg-secondary overflow-hidden border border-border">
-              {member.image ? (
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <User className="w-24 h-24 text-muted-foreground/30" />
-                </div>
-              )}
-            </div>
-
-            <div className="max-w-sm ml-auto p-5 rounded-xl border border-border bg-card/50">
-              <div className="space-y-3">
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">
-                    role
-                  </p>
-                  <p className="text-sm">{member.role}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">
-                    team
-                  </p>
-                  <p className="text-sm">Team Fi</p>
-                </div>
-              </div>
-            </div>
+          <div className="flex justify-center items-start">
+            <ProfileCard
+              name={member.name}
+              title={member.role}
+              handle="@casey"
+              status="Online"
+              contactText="Contact Me"
+              avatarUrl={member.image || "https://i.pravatar.cc/300?img=5"}
+              showUserInfo={true}
+              enableTilt={true}
+              enableMobileTilt={false}
+              onContactClick={() => window.location.href = "/#contact"}
+            />
           </div>
         </div>
       </div>

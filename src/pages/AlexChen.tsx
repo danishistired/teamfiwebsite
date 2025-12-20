@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, User } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import ProfileCard from "@/components/ProfileCard";
 
 const AlexChen = () => {
   const member = {
@@ -46,8 +47,19 @@ const AlexChen = () => {
             </div>
           </div>
 
-          <div className="space-y-6">
-            {/* Empty space */}
+          <div className="flex justify-center items-start">
+            <ProfileCard
+              name={member.name}
+              title={member.role}
+              handle="@danish"
+              status="Online"
+              contactText="Contact Me"
+              avatarUrl={member.image || "https://i.pravatar.cc/300?img=1"}
+              showUserInfo={true}
+              enableTilt={true}
+              enableMobileTilt={false}
+              onContactClick={() => window.location.href = "/#contact"}
+            />
           </div>
         </div>
       </div>
