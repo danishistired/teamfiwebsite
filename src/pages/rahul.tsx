@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Linkedin, Github, Mail } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
 import pfp from "@/assets/Rahulnobg.png";
 
@@ -51,6 +51,34 @@ const Rahul = () => {
                 </a>
                 .
               </p>
+            </div>
+
+            <div className="flex items-center gap-4 pt-4">
+              <a
+                href="https://www.linkedin.com/in/rahul-jaluthria-629101321/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-6 h-6" />
+              </a>
+              <a
+                href="https://github.com/Rahuljaluthria"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="w-6 h-6" />
+              </a>
+              <a
+                href="mailto:rahuljaluthria321@gmail.com"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Email"
+              >
+                <Mail className="w-6 h-6" />
+              </a>
             </div>
           </div>
 

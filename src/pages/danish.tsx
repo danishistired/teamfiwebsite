@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Linkedin, Github, Mail, Globe } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
+import StickerPeel from "@/components/StickerPeel";
 import pfp from "@/assets/newme.png";
+import logo from "@/assets/favicon.png";
 
 const Danish = () => {
   const navigate = useNavigate();
@@ -22,7 +24,18 @@ const Danish = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <StickerPeel
+        imageSrc={logo}
+        width={100}
+        rotate={0}
+        peelBackHoverPct={20}
+        peelBackActivePct={40}
+        shadowIntensity={0.6}
+        lightingIntensity={0.1}
+        initialPosition={{ x: 835, y: 129 }}
+      />
+      
       <div className="container py-12">
         <button
           onClick={handleBackToTeam}
@@ -51,6 +64,43 @@ const Danish = () => {
                 </a>
                 .
               </p>
+            </div>
+
+            <div className="flex items-center gap-4 pt-4">
+              <a
+                href="https://www.linkedin.com/in/danish--verma"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-6 h-6" />
+              </a>
+              <a
+                href="https://github.com/danishistired"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="w-6 h-6" />
+              </a>
+              <a
+                href="mailto:danishverma1116@gmail.com"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Email"
+              >
+                <Mail className="w-6 h-6" />
+              </a>
+              <a
+                href="https://danishv.me"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Website"
+              >
+                <Globe className="w-6 h-6" />
+              </a>
             </div>
           </div>
 

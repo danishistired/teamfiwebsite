@@ -4,72 +4,75 @@ import "lenis/dist/lenis.css";
 
 export const useLenis = () => {
   const lenisRef = useRef<Lenis | null>(null);
+  const snappingRef = useRef(false);
+  const lastSnapRef = useRef(0);
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
+      duration: 1.2,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 2,
-      infinite: false,
     });
 
     lenisRef.current = lenis;
-
-    // Make lenis globally accessible
     (window as any).lenis = lenis;
 
-    let scrollTimeout: NodeJS.Timeout;
-    let isSnapping = false;
+    const SNAP_COOLDOWN = 400; // ms
 
-    // Smooth snap to nearest section after scrolling stops
-    const handleScroll = () => {
-      if (isSnapping) return;
+    const snapToNearestSection = () => {
+      if (snappingRef.current) return;
 
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        const sections = document.querySelectorAll('.snap-section');
-        const scrollPosition = window.scrollY + window.innerHeight / 2;
-        
-        let closestSection: Element | null = null;
-        let closestDistance = Infinity;
+      const now = performance.now();
+      if (now - lastSnapRef.current < SNAP_COOLDOWN) return;
 
-        sections.forEach((section) => {
-          const rect = section.getBoundingClientRect();
-          const sectionMiddle = rect.top + window.scrollY + rect.height / 2;
-          const distance = Math.abs(scrollPosition - sectionMiddle);
+      const sections = document.querySelectorAll<HTMLElement>(".snap-section");
+      if (!sections.length) return;
 
-          if (distance < closestDistance) {
-            closestDistance = distance;
-            closestSection = section;
-          }
-        });
+      const scrollMiddle = window.scrollY + window.innerHeight / 2;
 
-        if (closestSection) {
-          const rect = closestSection.getBoundingClientRect();
-          const targetScroll = window.scrollY + rect.top;
-          const currentScroll = window.scrollY;
-          const difference = Math.abs(targetScroll - currentScroll);
+      let closest: HTMLElement | null = null;
+      let minDistance = Infinity;
 
-          // Snap if not already perfectly aligned (within 5px tolerance)
-          if (difference > 5) {
-            isSnapping = true;
-            lenis.scrollTo(closestSection as HTMLElement, {
-              duration: 1.2,
-              easing: (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
-              onComplete: () => {
-                isSnapping = false;
-              }
-            });
-          }
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const sectionMiddle = rect.top + window.scrollY + rect.height / 2;
+        const distance = Math.abs(scrollMiddle - sectionMiddle);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closest = section;
         }
-      }, 150); // Wait 150ms after scroll stops
+      });
+
+      if (!closest) return;
+
+      const target = closest.offsetTop;
+      const diff = Math.abs(window.scrollY - target);
+
+      if (diff < 6) return;
+
+      snappingRef.current = true;
+      lastSnapRef.current = now;
+
+      lenis.scrollTo(target, {
+        duration: 1,
+        easing: (t) => t < 0.5
+          ? 4 * t * t * t
+          : 1 - Math.pow(-2 * t + 2, 3) / 2,
+        onComplete: () => {
+          snappingRef.current = false;
+        },
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // 🔥 Correct scroll listener
+    lenis.on("scroll", ({ isScrolling }) => {
+      if (!isScrolling) {
+        snapToNearestSection();
+      }
+    });
 
     function raf(time: number) {
       lenis.raf(time);
@@ -80,8 +83,6 @@ export const useLenis = () => {
 
     return () => {
       lenis.destroy();
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(scrollTimeout);
       delete (window as any).lenis;
     };
   }, []);

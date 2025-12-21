@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Linkedin, Github, Mail } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
 import pfp from "@/assets/ankitnobg.png";
 
@@ -51,6 +51,34 @@ const Ankit = () => {
                 </a>
                 .
               </p>
+            </div>
+
+            <div className="flex items-center gap-4 pt-4">
+              <a
+                href="https://www.linkedin.com/in/ankit-kumar3323?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-6 h-6" />
+              </a>
+              <a
+                href="https://github.com/DarKnight890"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="w-6 h-6" />
+              </a>
+              <a
+                href="mailto:Ankitboora123an@gmail.com"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Email"
+              >
+                <Mail className="w-6 h-6" />
+              </a>
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import MetallicPaint, { parseLogoImage } from "./MetallicPaint";
+import ShinyText from "./ShinyText";
 import { useState, useEffect } from "react";
 import logo from "../assets/fi.png";
 
@@ -68,7 +69,12 @@ const LandingHero = () => {
 
       {/* ❌ NOT SCALED */}
       <div className="absolute bottom-12 flex items-center gap-2 text-muted-foreground text-sm">
-        <span>scroll down</span>
+        <ShinyText 
+          text="scroll down" 
+          disabled={false} 
+          speed={3} 
+          className="text-muted-foreground text-sm" 
+        />
         <ChevronDown className="w-4 h-4 animate-bounce" />
       </div>
     </section>
