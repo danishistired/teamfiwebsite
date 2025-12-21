@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
-import pfp from "@/assets/rahulnobg.png";
+import pfp from "@/assets/Rahulnobg.png";
 
 const Rahul = () => {
   const navigate = useNavigate();
