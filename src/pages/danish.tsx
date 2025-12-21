@@ -1,10 +1,17 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
+import pfp from "@/assets/newme.png";
 
-const AlexChen = () => {
+const Danish = () => {
+  const navigate = useNavigate();
+
+  const handleBackToTeam = () => {
+    navigate('/', { state: { scrollTo: 'team' } });
+  };
+
   const member = {
-    id: "Danish",
+    id: "danish",
     name: "Danish Verma",
     role: "lead developer/ leader",
     image: "",
@@ -17,13 +24,13 @@ const AlexChen = () => {
   return (
     <div className="min-h-screen">
       <div className="container py-12">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-12"
+        <button
+          onClick={handleBackToTeam}
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-12 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>back to team</span>
-        </Link>
+        </button>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-8">
@@ -51,14 +58,14 @@ const AlexChen = () => {
             <ProfileCard
               name={member.name}
               title={member.role}
-              handle="@danish"
+              handle="dahahanish"
               status="Online"
               contactText="Contact Me"
-              avatarUrl={member.image || "https://i.pravatar.cc/300?img=1"}
+              avatarUrl={member.image || pfp}
               showUserInfo={true}
               enableTilt={true}
               enableMobileTilt={false}
-              onContactClick={() => window.location.href = "/#contact"}
+              onContactClick={() => window.location.href = "https://www.linkedin.com/in/danish--verma"}
             />
           </div>
         </div>
@@ -67,4 +74,4 @@ const AlexChen = () => {
   );
 };
 
-export default AlexChen;
+export default Danish;

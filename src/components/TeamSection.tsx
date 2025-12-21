@@ -12,7 +12,7 @@ const gradients = [
 
 const TeamSection = () => {
   const chromaItems: ChromaItem[] = teamMembers.map((member, index) => ({
-    image: member.image || `https://i.pravatar.cc/300?img=${index + 1}`,
+    image: member.image || `https://i.pravatar.cc/300?img=$1`,
     title: member.name,
     subtitle: member.role,
     handle: `@${member.id}`,

@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import iconpattern from '@/assets/iconpattern.png';
+import grain from '@/assets/grain.webp';
+import me from '@/assets/me.jpeg';
 import './ProfileCard.css';
 
 interface ProfileCardProps {
@@ -39,9 +42,9 @@ const adjust = (v: number, fMin: number, fMax: number, tMin: number, tMax: numbe
   round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
 
 const ProfileCardComponent: React.FC<ProfileCardProps> = ({
-  avatarUrl = '<Placeholder for avatar URL>',
-  iconUrl = '<Placeholder for icon URL>',
-  grainUrl = '<Placeholder for grain URL>',
+  avatarUrl = '<placeholder>',
+  iconUrl = iconpattern,
+  grainUrl = grain,
   innerGradient,
   behindGlowEnabled = true,
   behindGlowColor,

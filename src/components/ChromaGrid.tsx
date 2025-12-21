@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './ChromaGrid.css';
 
@@ -41,6 +42,7 @@ export const ChromaGrid: React.FC<ChromaGridProps> = ({
   const setX = useRef<SetterFn | null>(null);
   const setY = useRef<SetterFn | null>(null);
   const pos = useRef({ x: 0, y: 0 });
+  const navigate = useNavigate();
 
   const demo: ChromaItem[] = [
     {
@@ -141,7 +143,16 @@ export const ChromaGrid: React.FC<ChromaGridProps> = ({
 
   const handleCardClick = (url?: string) => {
     if (url) {
-      window.open(url, '_blank', 'noopener,noreferrer');
+      if (url.startsWith('/')) {
+        // Internal route - use React Router navigation in same tab
+        navigate(url);
+      } else if (url.startsWith('http')) {
+        // External URL - open in new tab
+        window.open(url, '_blank', 'noopener,noreferrer');
+      } else {
+        // Fallback - treat as internal
+        navigate(url);
+      }
     }
   };
 

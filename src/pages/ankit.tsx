@@ -1,29 +1,35 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
 
-const SamRivera = () => {
+const Ankit = () => {
+  const navigate = useNavigate();
+
+  const handleBackToTeam = () => {
+    navigate('/', { state: { scrollTo: 'team' } });
+  };
+
   const member = {
-    id: "sam",
-    name: "Sam Rivera",
-    role: "security researcher",
+    id: "ankit",
+    name: "Casey Morgan",
+    role: "product designer",
     image: "",
     bio: [
-      "dedicated to finding and fixing vulnerabilities before they become problems. experienced in penetration testing and secure code review.",
-      "active participant in ctf competitions and open source security tools.",
+      "bridges the gap between user needs and technical implementation. focused on accessible, inclusive design.",
+      "believes good design is invisible — it just works.",
     ],
   };
 
   return (
     <div className="min-h-screen">
       <div className="container py-12">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-12"
+        <button
+          onClick={handleBackToTeam}
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-12 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>back to team</span>
-        </Link>
+        </button>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-8">
@@ -51,10 +57,10 @@ const SamRivera = () => {
             <ProfileCard
               name={member.name}
               title={member.role}
-              handle="@sam"
+              handle="@casey"
               status="Online"
               contactText="Contact Me"
-              avatarUrl={member.image || "https://i.pravatar.cc/300?img=3"}
+              avatarUrl={member.image || "https://i.pravatar.cc/300?img=5"}
               showUserInfo={true}
               enableTilt={true}
               enableMobileTilt={false}
@@ -67,4 +73,4 @@ const SamRivera = () => {
   );
 };
 
-export default SamRivera;
+export default Ankit;

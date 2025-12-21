@@ -1,8 +1,14 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
 
-const JordanPark = () => {
+const chirag = () => {
+  const navigate = useNavigate();
+
+  const handleBackToTeam = () => {
+    navigate('/', { state: { scrollTo: 'team' } });
+  };
+
   const member = {
     id: "jordan",
     name: "Jordan Park",
@@ -17,13 +23,13 @@ const JordanPark = () => {
   return (
     <div className="min-h-screen">
       <div className="container py-12">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-12"
+        <button
+          onClick={handleBackToTeam}
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-12 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>back to team</span>
-        </Link>
+        </button>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-8">
@@ -67,4 +73,4 @@ const JordanPark = () => {
   );
 };
 
-export default JordanPark;
+export default chirag;

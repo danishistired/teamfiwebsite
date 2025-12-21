@@ -1,29 +1,35 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
 
-const CaseyMorgan = () => {
+const Rahul = () => {
+  const navigate = useNavigate();
+
+  const handleBackToTeam = () => {
+    navigate('/', { state: { scrollTo: 'team' } });
+  };
+
   const member = {
-    id: "casey",
-    name: "Casey Morgan",
-    role: "product designer",
+    id: "rahul",
+    name: "Rahul Jaluthria",
+    role: "UI/UX Designer",
     image: "",
     bio: [
-      "bridges the gap between user needs and technical implementation. focused on accessible, inclusive design.",
-      "believes good design is invisible — it just works.",
+      "I’m a UI/UX designer who turns ideas into seamless digital experiences. ",
+      "Through strong collaboration with my team, I design interfaces that are simple, functional, and visually engaging.",
     ],
   };
 
   return (
     <div className="min-h-screen">
       <div className="container py-12">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-12"
+        <button
+          onClick={handleBackToTeam}
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-12 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>back to team</span>
-        </Link>
+        </button>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-8">
@@ -51,14 +57,14 @@ const CaseyMorgan = () => {
             <ProfileCard
               name={member.name}
               title={member.role}
-              handle="@casey"
+              handle="rjaluthria"
               status="Online"
               contactText="Contact Me"
-              avatarUrl={member.image || "https://i.pravatar.cc/300?img=5"}
+              avatarUrl={member.image || "https://i.pravatar.cc/300?img=4"}
               showUserInfo={true}
               enableTilt={true}
               enableMobileTilt={false}
-              onContactClick={() => window.location.href = "/#contact"}
+              onContactClick={() => window.location.href = "https://www.linkedin.com/in/rahul-jaluthria-629101321/"}
             />
           </div>
         </div>
@@ -67,4 +73,4 @@ const CaseyMorgan = () => {
   );
 };
 
-export default CaseyMorgan;
+export default Rahul;
