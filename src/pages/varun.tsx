@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
+import pfp from "@/assets/varunnobg.png";
 
 const varun = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const varun = () => {
 
   const member = {
     id: "varun",
-    name: "Sam Rivera",
+    name: "Varun Gupta",
     role: "security researcher",
     image: "",
     bio: [
@@ -60,7 +61,7 @@ const varun = () => {
               handle="@sam"
               status="Online"
               contactText="Contact Me"
-              avatarUrl={member.image || "https://i.pravatar.cc/300?img=3"}
+              avatarUrl={member.image || pfp}
               showUserInfo={true}
               enableTilt={true}
               enableMobileTilt={false}

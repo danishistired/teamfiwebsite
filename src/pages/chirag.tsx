@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
+import pfp from "@/assets/chiragnobg.png";
 
 const chirag = () => {
   const navigate = useNavigate();
@@ -10,8 +11,8 @@ const chirag = () => {
   };
 
   const member = {
-    id: "jordan",
-    name: "Jordan Park",
+    id: "chirag",
+    name: "Chirag Singh",
     role: "frontend engineer",
     image: "",
     bio: [
@@ -57,10 +58,10 @@ const chirag = () => {
             <ProfileCard
               name={member.name}
               title={member.role}
-              handle="@jordan"
+              handle="beingchirag"
               status="Online"
               contactText="Contact Me"
-              avatarUrl={member.image || "https://i.pravatar.cc/300?img=2"}
+              avatarUrl={member.image || pfp}
               showUserInfo={true}
               enableTilt={true}
               enableMobileTilt={false}
