@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "motion/react";
+import { useRef, useState, useEffect } from "react";
+import { motion, useInView, useMotionValue, useSpring, PanInfo } from "motion/react";
+import { Camera, MapPin } from "lucide-react";
 
 const galleryImages = [
   {
@@ -7,170 +8,279 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
     event: "Hackathon 2024",
     location: "Tech Hub",
+    rotation: -12,
+    scale: 1.1,
   },
   {
     id: 2,
     src: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80",
     event: "Conference Talk",
     location: "Dev Summit",
+    rotation: 8,
+    scale: 0.95,
   },
   {
     id: 3,
     src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80",
     event: "Team Meetup",
     location: "Office",
+    rotation: -5,
+    scale: 1,
   },
   {
     id: 4,
     src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&q=80",
     event: "Award Ceremony",
     location: "Grand Hall",
+    rotation: 15,
+    scale: 1.05,
   },
   {
     id: 5,
     src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
     event: "Workshop",
     location: "Innovation Lab",
+    rotation: -8,
+    scale: 0.9,
   },
   {
     id: 6,
     src: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
     event: "Planning Session",
     location: "Workspace",
+    rotation: 10,
+    scale: 1,
   },
 ];
+
+interface DraggablePhotoProps {
+  image: typeof galleryImages[0];
+  index: number;
+  isInView: boolean;
+  bringToFront: (id: number) => void;
+  zIndex: number;
+  containerBounds: DOMRect | null;
+}
+
+const DraggablePhoto = ({ image, index, isInView, bringToFront, zIndex, containerBounds }: DraggablePhotoProps) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  
+  // Initial scattered positions
+  const positions = [
+    { x: -180, y: -120 },
+    { x: 150, y: -80 },
+    { x: -100, y: 80 },
+    { x: 200, y: 100 },
+    { x: -200, y: 0 },
+    { x: 100, y: -150 },
+  ];
+
+  const x = useMotionValue(positions[index % positions.length].x);
+  const y = useMotionValue(positions[index % positions.length].y);
+  
+  const springConfig = { stiffness: 300, damping: 30 };
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
+
+  const handleDragStart = () => {
+    setIsDragging(true);
+    bringToFront(image.id);
+  };
+
+  const handleDragEnd = (_: any, info: PanInfo) => {
+    setIsDragging(false);
+    x.set(x.get() + info.offset.x);
+    y.set(y.get() + info.offset.y);
+  };
+
+  return (
+    <motion.div
+      className="absolute cursor-grab active:cursor-grabbing"
+      style={{
+        x: springX,
+        y: springY,
+        zIndex,
+      }}
+      initial={{ 
+        opacity: 0, 
+        scale: 0,
+        rotate: image.rotation * 2,
+      }}
+      animate={isInView ? { 
+        opacity: 1, 
+        scale: image.scale,
+        rotate: isDragging ? 0 : image.rotation,
+      } : {}}
+      transition={{
+        opacity: { delay: 0.1 + index * 0.08, duration: 0.4 },
+        scale: { delay: 0.1 + index * 0.08, duration: 0.5, type: "spring" },
+        rotate: { type: "spring", stiffness: 200 },
+      }}
+      drag
+      dragMomentum={false}
+      dragElastic={0.1}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      whileDrag={{ scale: 1.1, rotate: 0 }}
+    >
+      {/* Polaroid-style photo */}
+      <motion.div
+        className="relative bg-foreground p-2 pb-12 rounded-sm"
+        style={{
+          boxShadow: isDragging 
+            ? "0 30px 60px -12px rgba(0,0,0,0.5), 0 18px 36px -18px rgba(0,0,0,0.4)"
+            : "0 10px 30px -10px rgba(0,0,0,0.3), 0 6px 12px -6px rgba(0,0,0,0.2)",
+        }}
+        animate={{
+          y: isHovered && !isDragging ? -8 : 0,
+        }}
+        transition={{ type: "spring", stiffness: 400 }}
+      >
+        {/* Photo */}
+        <div className="relative w-48 h-48 md:w-56 md:h-56 overflow-hidden bg-muted">
+          <motion.img
+            src={image.src}
+            alt={image.event}
+            className="w-full h-full object-cover"
+            animate={{
+              scale: isHovered ? 1.05 : 1,
+            }}
+            transition={{ duration: 0.3 }}
+            draggable={false}
+          />
+          
+          {/* Hover overlay */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent flex flex-col justify-end p-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="flex items-center gap-1.5 text-foreground text-xs">
+              <MapPin className="w-3 h-3" />
+              <span>{image.location}</span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Caption area */}
+        <div className="absolute bottom-2 left-2 right-2">
+          <p className="text-background text-sm font-medium truncate">
+            {image.event}
+          </p>
+        </div>
+
+        {/* Tape effect */}
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-12 h-6 bg-accent/30 backdrop-blur-sm rounded-sm rotate-1" />
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const Gallery = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [zIndices, setZIndices] = useState<Record<number, number>>(() => {
+    const initial: Record<number, number> = {};
+    galleryImages.forEach((img, i) => {
+      initial[img.id] = i;
+    });
+    return initial;
+  });
+  const [containerBounds, setContainerBounds] = useState<DOMRect | null>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+  useEffect(() => {
+    if (containerRef.current) {
+      setContainerBounds(containerRef.current.getBoundingClientRect());
+    }
+  }, []);
+
+  const bringToFront = (id: number) => {
+    setZIndices(prev => {
+      const maxZ = Math.max(...Object.values(prev));
+      return { ...prev, [id]: maxZ + 1 };
     });
   };
 
   return (
-    <section id="gallery" className="snap-section flex items-center py-24 border-t border-border overflow-hidden">
-      <div className="container">
+    <section id="gallery" className="snap-section flex items-center py-24 border-t border-border overflow-hidden relative">
+      {/* Background texture */}
+      <div className="absolute inset-0 opacity-5">
+        <div 
+          className="w-full h-full"
+          style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, hsl(var(--foreground)) 1px, transparent 0)`,
+            backgroundSize: "32px 32px",
+          }}
+        />
+      </div>
+
+      <div className="container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
+          className="mb-8 text-center"
         >
-          <h2 className="text-2xl mb-4">gallery</h2>
-          <p className="text-muted-foreground mb-12 max-w-xl">
+          <motion.div
+            className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full border border-border bg-card/50 backdrop-blur-sm"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2 }}
+          >
+            <Camera className="w-4 h-4 text-accent" />
+            <span className="text-sm font-medium text-muted-foreground">Photo Board</span>
+          </motion.div>
+          <h2 className="text-3xl md:text-4xl mb-4">gallery</h2>
+          <p className="text-muted-foreground mb-2 max-w-xl mx-auto">
             moments captured from events, hackathons, and team adventures.
           </p>
+          <p className="text-xs text-accent">drag the photos around!</p>
         </motion.div>
 
+        {/* Draggable photo area */}
         <div
           ref={containerRef}
-          className="relative grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4"
-          onMouseMove={handleMouseMove}
+          className="relative h-[500px] md:h-[600px] flex items-center justify-center"
         >
-          {/* Spotlight effect */}
-          <div
-            className="pointer-events-none absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style={{
-              background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(120, 200, 255, 0.06), transparent 40%)`,
-            }}
+          {/* Center marker */}
+          <motion.div
+            className="absolute w-4 h-4 rounded-full border-2 border-dashed border-accent/30"
+            initial={{ scale: 0 }}
+            animate={isInView ? { scale: 1 } : {}}
+            transition={{ delay: 0.3 }}
           />
 
+          {/* Photos */}
           {galleryImages.map((image, index) => (
-            <motion.div
+            <DraggablePhoto
               key={image.id}
-              initial={{ opacity: 0, scale: 0.8, y: 50 }}
-              animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.1,
-                ease: [0.25, 0.46, 0.45, 0.94],
-              }}
-              className={`relative group cursor-pointer ${
-                index === 0 ? "md:col-span-2 md:row-span-2" : ""
-              }`}
-              onMouseEnter={() => setHoveredId(image.id)}
-              onMouseLeave={() => setHoveredId(null)}
-            >
-              <div className="relative overflow-hidden rounded-xl aspect-square">
-                {/* Image */}
-                <motion.img
-                  src={image.src}
-                  alt={image.event}
-                  className="w-full h-full object-cover"
-                  animate={{
-                    scale: hoveredId === image.id ? 1.1 : 1,
-                    filter: hoveredId !== null && hoveredId !== image.id 
-                      ? "grayscale(100%) brightness(0.5)" 
-                      : "grayscale(0%) brightness(1)",
-                  }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                />
-
-                {/* Gradient overlay */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"
-                  animate={{
-                    opacity: hoveredId === image.id ? 1 : 0.3,
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
-
-                {/* Content */}
-                <motion.div
-                  className="absolute inset-0 flex flex-col justify-end p-4 md:p-6"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{
-                    opacity: hoveredId === image.id ? 1 : 0,
-                    y: hoveredId === image.id ? 0 : 20,
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <span className="text-xs text-accent uppercase tracking-wider mb-1">
-                    {image.location}
-                  </span>
-                  <h3 className="text-lg md:text-xl font-semibold text-foreground">
-                    {image.event}
-                  </h3>
-                </motion.div>
-
-                {/* Border glow effect */}
-                <motion.div
-                  className="absolute inset-0 rounded-xl border-2 border-accent/50"
-                  animate={{
-                    opacity: hoveredId === image.id ? 1 : 0,
-                  }}
-                  transition={{ duration: 0.2 }}
-                />
-              </div>
-
-              {/* Floating corner accents */}
-              <motion.div
-                className="absolute -top-1 -left-1 w-4 h-4 border-l-2 border-t-2 border-accent"
-                animate={{
-                  opacity: hoveredId === image.id ? 1 : 0,
-                  x: hoveredId === image.id ? 0 : 10,
-                  y: hoveredId === image.id ? 0 : 10,
-                }}
-                transition={{ duration: 0.2 }}
-              />
-              <motion.div
-                className="absolute -bottom-1 -right-1 w-4 h-4 border-r-2 border-b-2 border-accent"
-                animate={{
-                  opacity: hoveredId === image.id ? 1 : 0,
-                  x: hoveredId === image.id ? 0 : -10,
-                  y: hoveredId === image.id ? 0 : -10,
-                }}
-                transition={{ duration: 0.2 }}
-              />
-            </motion.div>
+              image={image}
+              index={index}
+              isInView={isInView}
+              bringToFront={bringToFront}
+              zIndex={zIndices[image.id]}
+              containerBounds={containerBounds}
+            />
           ))}
         </div>
+
+        {/* Decorative elements */}
+        <motion.div
+          className="absolute top-1/4 left-8 w-24 h-24 border border-dashed border-accent/20 rounded-full"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ delay: 0.5 }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 right-8 w-16 h-16 border border-dashed border-accent/20 rounded-full"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ delay: 0.6 }}
+        />
       </div>
     </section>
   );
