@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { motion, useInView } from "motion/react";
-import { Trophy, Award, Star, Medal } from "lucide-react";
+import { motion, useInView, AnimatePresence } from "motion/react";
+import { Trophy, Award, Star, Medal, Sparkles } from "lucide-react";
 
 const achievements = [
   {
@@ -9,9 +9,8 @@ const achievements = [
     description: "built a real-time collaboration tool in 48 hours",
     year: "2024",
     icon: Trophy,
-    color: "from-yellow-500/20 to-orange-500/20",
-    borderColor: "border-yellow-500/30",
-    iconColor: "text-yellow-500",
+    gradient: "from-amber-400 via-yellow-500 to-orange-500",
+    glow: "shadow-[0_0_60px_-10px_rgba(251,191,36,0.6)]",
   },
   {
     event: "open source contribution",
@@ -19,9 +18,8 @@ const achievements = [
     description: "accepted patches to major infrastructure project",
     year: "2023",
     icon: Star,
-    color: "from-purple-500/20 to-pink-500/20",
-    borderColor: "border-purple-500/30",
-    iconColor: "text-purple-500",
+    gradient: "from-violet-400 via-purple-500 to-fuchsia-500",
+    glow: "shadow-[0_0_60px_-10px_rgba(168,85,247,0.6)]",
   },
   {
     event: "ctf competition",
@@ -29,9 +27,8 @@ const achievements = [
     description: "national cybersecurity capture-the-flag event",
     year: "2023",
     icon: Medal,
-    color: "from-cyan-500/20 to-blue-500/20",
-    borderColor: "border-cyan-500/30",
-    iconColor: "text-cyan-500",
+    gradient: "from-cyan-400 via-sky-500 to-blue-500",
+    glow: "shadow-[0_0_60px_-10px_rgba(6,182,212,0.6)]",
   },
   {
     event: "academic scholarship",
@@ -39,129 +36,229 @@ const achievements = [
     description: "recognized for outstanding technical coursework",
     year: "2022",
     icon: Award,
-    color: "from-green-500/20 to-emerald-500/20",
-    borderColor: "border-green-500/30",
-    iconColor: "text-green-500",
+    gradient: "from-emerald-400 via-green-500 to-teal-500",
+    glow: "shadow-[0_0_60px_-10px_rgba(34,197,94,0.6)]",
   },
 ];
 
 const Achievements = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isHoveringShelf, setIsHoveringShelf] = useState(false);
 
   return (
-    <section id="achievements" className="snap-section flex items-center py-24 border-t border-border">
-      <div className="container" ref={containerRef}>
+    <section id="achievements" className="snap-section flex items-center py-24 border-t border-border relative overflow-hidden">
+      {/* Ambient background glow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, hsl(var(--accent) / 0.08) 0%, transparent 70%)",
+          }}
+          animate={{
+            scale: isHoveringShelf ? 1.2 : 1,
+            opacity: isHoveringShelf ? 1 : 0.5,
+          }}
+          transition={{ duration: 0.8 }}
+        />
+      </div>
+
+      <div className="container relative z-10" ref={containerRef}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-16"
+          className="mb-16 text-center"
         >
-          <h2 className="text-2xl mb-4">achievements</h2>
-          <p className="text-muted-foreground max-w-xl">
+          <motion.div
+            className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full border border-border bg-card/50 backdrop-blur-sm"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2 }}
+          >
+            <Sparkles className="w-4 h-4 text-accent" />
+            <span className="text-sm font-medium text-muted-foreground">Trophy Cabinet</span>
+          </motion.div>
+          <h2 className="text-3xl md:text-4xl mb-4">achievements</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
             milestones and recognition we've collected along the way.
           </p>
         </motion.div>
-        
-        {/* Timeline */}
-        <div className="relative">
-          {/* Vertical line */}
-          <motion.div
-            className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-border"
-            initial={{ scaleY: 0 }}
-            animate={isInView ? { scaleY: 1 } : {}}
-            style={{ originY: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          />
 
-          <div className="space-y-8 md:space-y-12">
+        {/* Trophy Shelf */}
+        <div
+          className="relative"
+          onMouseEnter={() => setIsHoveringShelf(true)}
+          onMouseLeave={() => setIsHoveringShelf(false)}
+        >
+          {/* Glass shelf effect */}
+          <motion.div
+            className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-full max-w-4xl h-16"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="w-full h-full bg-gradient-to-b from-accent/10 to-transparent rounded-t-3xl" />
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+          </motion.div>
+
+          {/* Trophy Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto">
             {achievements.map((item, index) => {
               const Icon = item.icon;
-              const isEven = index % 2 === 0;
-              
+              const isActive = activeIndex === index;
+
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.15 }}
-                  className={`relative flex items-center gap-8 ${
-                    isEven ? "md:flex-row" : "md:flex-row-reverse"
-                  }`}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
+                  initial={{ opacity: 0, y: 50, rotateY: -30 }}
+                  animate={isInView ? { opacity: 1, y: 0, rotateY: 0 } : {}}
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.2 + index * 0.1,
+                    type: "spring",
+                    stiffness: 100,
+                  }}
+                  className="relative group perspective-1000"
+                  onMouseEnter={() => setActiveIndex(index)}
+                  onMouseLeave={() => setActiveIndex(null)}
                 >
-                  {/* Timeline dot */}
+                  {/* Trophy Card */}
                   <motion.div
-                    className={`absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 ${item.borderColor} bg-background z-10`}
+                    className={`relative p-6 rounded-2xl cursor-pointer transform-gpu ${
+                      isActive ? item.glow : ""
+                    }`}
                     animate={{
-                      scale: hoveredIndex === index ? 1.5 : 1,
-                      backgroundColor: hoveredIndex === index ? "hsl(var(--accent))" : "hsl(var(--background))",
+                      y: isActive ? -20 : 0,
+                      rotateY: isActive ? 5 : 0,
+                      rotateX: isActive ? -5 : 0,
                     }}
-                    transition={{ duration: 0.2 }}
-                  />
-
-                  {/* Content */}
-                  <div className={`flex-1 pl-16 md:pl-0 ${isEven ? "md:pr-12 md:text-right" : "md:pl-12"}`}>
-                    <motion.div
-                      className={`relative p-6 rounded-2xl border ${item.borderColor} bg-gradient-to-br ${item.color} backdrop-blur-sm overflow-hidden`}
-                      animate={{
-                        scale: hoveredIndex === index ? 1.02 : 1,
-                        y: hoveredIndex === index ? -5 : 0,
-                      }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {/* Background glow */}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    style={{ transformStyle: "preserve-3d" }}
+                  >
+                    {/* Glass background */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-card/80 via-card/60 to-card/80 backdrop-blur-xl border border-border/50 overflow-hidden">
+                      {/* Holographic shimmer */}
                       <motion.div
-                        className="absolute inset-0 opacity-0"
-                        animate={{
-                          opacity: hoveredIndex === index ? 0.5 : 0,
-                        }}
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                         style={{
-                          background: `radial-gradient(circle at ${isEven ? '100%' : '0%'} 50%, ${item.color.includes('yellow') ? 'rgba(234, 179, 8, 0.2)' : item.color.includes('purple') ? 'rgba(168, 85, 247, 0.2)' : item.color.includes('cyan') ? 'rgba(6, 182, 212, 0.2)' : 'rgba(34, 197, 94, 0.2)'}, transparent 50%)`,
+                          background: `linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.05) 50%, transparent 55%)`,
+                        }}
+                        animate={isActive ? {
+                          x: ["-100%", "200%"],
+                        } : {}}
+                        transition={{
+                          duration: 1,
+                          ease: "easeInOut",
+                          repeat: isActive ? Infinity : 0,
+                          repeatDelay: 0.5,
                         }}
                       />
+                    </div>
 
-                      <div className={`relative flex items-start gap-4 ${isEven ? "md:flex-row-reverse" : ""}`}>
-                        {/* Icon */}
-                        <motion.div
-                          className={`shrink-0 p-3 rounded-xl border ${item.borderColor} bg-background/50`}
-                          animate={{
-                            rotate: hoveredIndex === index ? [0, -10, 10, 0] : 0,
-                          }}
-                          transition={{ duration: 0.4 }}
-                        >
-                          <Icon className={`w-6 h-6 ${item.iconColor}`} />
-                        </motion.div>
+                    {/* Content */}
+                    <div className="relative z-10 flex flex-col items-center text-center">
+                      {/* Icon with gradient */}
+                      <motion.div
+                        className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center mb-4`}
+                        animate={{
+                          scale: isActive ? 1.1 : 1,
+                          rotate: isActive ? [0, -5, 5, 0] : 0,
+                        }}
+                        transition={{
+                          scale: { type: "spring", stiffness: 300 },
+                          rotate: { duration: 0.4 },
+                        }}
+                      >
+                        <Icon className="w-8 h-8 text-background" strokeWidth={2.5} />
 
-                        <div className={`flex-1 ${isEven ? "md:text-right" : ""}`}>
-                          <div className={`flex items-center gap-3 mb-2 ${isEven ? "md:flex-row-reverse" : ""}`}>
-                            <h3 className="font-semibold text-lg">{item.event}</h3>
-                            <span className="text-xs font-mono text-muted-foreground px-2 py-0.5 rounded-full border border-border">
-                              {item.year}
-                            </span>
-                          </div>
-                          
-                          <span className={`inline-block text-sm font-medium ${item.iconColor} mb-2`}>
-                            {item.position}
-                          </span>
-                          
-                          <p className="text-sm text-muted-foreground">
+                        {/* Floating particles */}
+                        <AnimatePresence>
+                          {isActive && (
+                            <>
+                              {[...Array(3)].map((_, i) => (
+                                <motion.div
+                                  key={i}
+                                  className={`absolute w-1.5 h-1.5 rounded-full bg-gradient-to-br ${item.gradient}`}
+                                  initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+                                  animate={{
+                                    opacity: [0, 1, 0],
+                                    scale: [0, 1, 0],
+                                    x: [0, (i - 1) * 30],
+                                    y: [0, -40 - i * 10],
+                                  }}
+                                  exit={{ opacity: 0 }}
+                                  transition={{
+                                    duration: 1,
+                                    delay: i * 0.15,
+                                    repeat: Infinity,
+                                    repeatDelay: 0.5,
+                                  }}
+                                />
+                              ))}
+                            </>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+
+                      {/* Year badge */}
+                      <motion.span
+                        className="text-xs font-mono text-accent px-2 py-0.5 rounded-full border border-accent/30 bg-accent/10 mb-3"
+                        animate={{
+                          borderColor: isActive ? "hsl(var(--accent))" : "hsl(var(--accent) / 0.3)",
+                        }}
+                      >
+                        {item.year}
+                      </motion.span>
+
+                      {/* Position */}
+                      <motion.h3
+                        className={`font-bold text-lg mb-1 bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}
+                        animate={{
+                          scale: isActive ? 1.05 : 1,
+                        }}
+                      >
+                        {item.position}
+                      </motion.h3>
+
+                      {/* Event name */}
+                      <p className="text-sm text-foreground font-medium mb-2">
+                        {item.event}
+                      </p>
+
+                      {/* Description - shown on hover */}
+                      <AnimatePresence>
+                        {isActive && (
+                          <motion.p
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="text-xs text-muted-foreground leading-relaxed"
+                          >
                             {item.description}
-                          </p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </div>
+                          </motion.p>
+                        )}
+                      </AnimatePresence>
+                    </div>
 
-                  {/* Spacer for alternating layout */}
-                  <div className="hidden md:block flex-1" />
+                    {/* Reflection effect */}
+                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-gradient-to-b from-accent/10 to-transparent blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </motion.div>
                 </motion.div>
               );
             })}
           </div>
+
+          {/* Decorative shelf line */}
+          <motion.div
+            className="absolute -bottom-4 left-1/2 -translate-x-1/2 h-px w-full max-w-5xl"
+            initial={{ scaleX: 0 }}
+            animate={isInView ? { scaleX: 1 } : {}}
+            transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
+          >
+            <div className="w-full h-full bg-gradient-to-r from-transparent via-border to-transparent" />
+          </motion.div>
         </div>
       </div>
     </section>
