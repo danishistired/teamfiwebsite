@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { motion } from "motion/react";
 
 const navItems = [
@@ -15,20 +15,25 @@ const ScrollNavigation = () => {
   const [visible, setVisible] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const [isReady, setIsReady] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
+  // Detect active section on scroll
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const threshold = window.innerHeight * 0.5;
       setVisible(scrollY > threshold);
 
-      // Find active section
-      const sections = navItems.map(item => ({
-        id: item.href.substring(1),
-        element: document.getElementById(item.href.substring(1))
-      })).filter(s => s.element);
+      // Find active section based on viewport position
+      const sections = navItems
+        .map((item) => {
+          const id = item.href.substring(1);
+          const element = document.getElementById(id);
+          return { id, element };
+        })
+        .filter((s) => s.element);
 
       let currentSection = "home";
       const viewportMiddle = scrollY + window.innerHeight / 2;
@@ -38,7 +43,7 @@ const ScrollNavigation = () => {
           const rect = section.element.getBoundingClientRect();
           const sectionTop = rect.top + scrollY;
           const sectionBottom = sectionTop + rect.height;
-          
+
           if (viewportMiddle >= sectionTop && viewportMiddle < sectionBottom) {
             currentSection = section.id;
             break;
@@ -50,85 +55,113 @@ const ScrollNavigation = () => {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Update indicator position when active section changes
-  useEffect(() => {
+  // Update indicator position when active section or visibility changes
+  const updateIndicator = useCallback(() => {
     const activeElement = itemRefs.current.get(activeSection);
-    if (activeElement && navRef.current) {
-      const navRect = navRef.current.getBoundingClientRect();
+    const navElement = navRef.current;
+    
+    if (activeElement && navElement) {
+      const navRect = navElement.getBoundingClientRect();
       const itemRect = activeElement.getBoundingClientRect();
+      
       setIndicatorStyle({
         left: itemRect.left - navRect.left,
         width: itemRect.width,
       });
+      
+      if (!isReady) {
+        setIsReady(true);
+      }
     }
-  }, [activeSection, visible]);
+  }, [activeSection, isReady]);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  useEffect(() => {
+    updateIndicator();
+    // Also update on resize
+    window.addEventListener("resize", updateIndicator);
+    return () => window.removeEventListener("resize", updateIndicator);
+  }, [updateIndicator, visible]);
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
     e.preventDefault();
     const targetId = href.substring(1);
-    const targetElement = document.getElementById(targetId) || document.querySelector(href);
-    
+    const targetElement =
+      document.getElementById(targetId) || document.querySelector(href);
+
     if (targetElement) {
       const lenis = (window as any).lenis;
       if (lenis) {
         lenis.scrollTo(targetElement, {
           duration: 1.8,
-          easing: (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+          easing: (t: number) =>
+            t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
         });
       } else {
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
   };
 
-  const setItemRef = (label: string) => (el: HTMLAnchorElement | null) => {
-    if (el) {
-      itemRefs.current.set(label.substring(1), el);
-    }
-  };
+  const setItemRef = useCallback(
+    (sectionId: string) => (el: HTMLAnchorElement | null) => {
+      if (el) {
+        itemRefs.current.set(sectionId, el);
+      }
+    },
+    []
+  );
 
   return (
     <nav
-      className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-        visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+      className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-700 ease-out ${
+        visible
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 -translate-y-6 pointer-events-none"
       }`}
     >
-      <div 
+      <div
         ref={navRef}
-        className="relative flex items-center gap-1 rounded-full border border-border bg-card/80 backdrop-blur-sm px-2 py-2"
+        className="relative flex items-center gap-0.5 rounded-full border border-white/10 bg-black/60 backdrop-blur-xl px-1.5 py-1.5 shadow-2xl shadow-black/50"
       >
-        {/* Sliding indicator */}
+        {/* Sliding pill indicator */}
         <motion.div
-          className="absolute h-[calc(100%-8px)] rounded-full bg-secondary/80"
+          className="absolute h-[calc(100%-6px)] rounded-full bg-gradient-to-r from-white/15 to-white/10 border border-white/20"
           initial={false}
           animate={{
             left: indicatorStyle.left,
             width: indicatorStyle.width,
+            opacity: isReady ? 1 : 0,
           }}
           transition={{
             type: "spring",
-            stiffness: 350,
-            damping: 30,
+            stiffness: 300,
+            damping: 28,
+            mass: 0.8,
           }}
-          style={{ top: 4 }}
+          style={{ top: 3 }}
         />
 
         {navItems.map((item) => {
-          const isActive = activeSection === item.href.substring(1);
+          const sectionId = item.href.substring(1);
+          const isActive = activeSection === sectionId;
+          
           return (
             <a
               key={item.label}
-              ref={setItemRef(item.href)}
+              ref={setItemRef(sectionId)}
               href={item.href}
               onClick={(e) => handleNavClick(e, item.href)}
-              className={`relative z-10 px-4 py-1.5 text-sm rounded-full transition-colors duration-200 ${
-                isActive 
-                  ? "text-foreground" 
-                  : "text-muted-foreground hover:text-foreground"
+              className={`relative z-10 px-3.5 py-1.5 text-xs font-medium tracking-wide uppercase rounded-full transition-colors duration-300 ${
+                isActive
+                  ? "text-white"
+                  : "text-white/50 hover:text-white/80"
               }`}
             >
               {item.label}
