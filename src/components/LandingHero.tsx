@@ -41,7 +41,7 @@ const LandingHero = () => {
     <section id="home" className="snap-section relative flex items-center justify-center min-h-screen overflow-hidden">
       {/* Blue-tinted overlay that fades out */}
       <motion.div
-        className="absolute inset-0 bg-[hsl(220,60%,8%)] pointer-events-none z-10"
+        className="absolute inset-0 bg-[hsl(220,15%,2%)] pointer-events-none z-10"
         initial={{ opacity: hasPlayedIntro ? 0 : 1 }}
         animate={{ opacity: logoLoaded ? 0 : 1 }}
         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}

@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Linkedin, Github, Mail, Globe } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
-import StickerPeel from "@/components/StickerPeel";
+import ClickSpark from "@/components/ClickSpark";
+import TextPressure from "@/components/TextPressure";
 import pfp from "@/assets/newme.png";
-import logo from "@/assets/favicon.png";
 
 const Danish = () => {
   const navigate = useNavigate();
@@ -24,19 +24,15 @@ const Danish = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
-      <StickerPeel
-        imageSrc={logo}
-        width={100}
-        rotate={0}
-        peelBackHoverPct={20}
-        peelBackActivePct={40}
-        shadowIntensity={0.6}
-        lightingIntensity={0.1}
-        initialPosition={{ x: 835, y: 129 }}
-      />
-      
-      <div className="container py-12">
+    <ClickSpark
+      sparkColor='#fff'
+      sparkSize={10}
+      sparkRadius={15}
+      sparkCount={8}
+      duration={400}
+    >
+      <div className="min-h-screen relative">
+        <div className="container py-12">
         <button
           onClick={handleBackToTeam}
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 mb-12 cursor-pointer"
@@ -49,7 +45,20 @@ const Danish = () => {
           <div className="space-y-8">
             <div>
               <p className="text-muted-foreground mb-2">{member.role}</p>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl">{member.name}</h1>
+              <div style={{position: 'relative', height: '200px'}}>
+                <TextPressure
+                  text="Danish Verma"
+                  flex={true}
+                  alpha={false}
+                  stroke={false}
+                  width={true}
+                  weight={true}
+                  italic={true}
+                  textColor="#ffffff"
+                  strokeColor="#ff0000"
+                  minFontSize={36}
+                />
+              </div>
             </div>
 
             <div className="space-y-6 text-muted-foreground">
@@ -120,7 +129,8 @@ const Danish = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </ClickSpark>
   );
 };
 
