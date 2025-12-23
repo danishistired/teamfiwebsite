@@ -207,17 +207,6 @@ const Gallery = () => {
 
   return (
     <section id="gallery" className="snap-section flex items-center py-24 border-t border-border overflow-hidden relative">
-      {/* Background texture */}
-      <div className="absolute inset-0 opacity-5">
-        <div 
-          className="w-full h-full"
-          style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, hsl(var(--foreground)) 1px, transparent 0)`,
-            backgroundSize: "32px 32px",
-          }}
-        />
-      </div>
-
       <div className="container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -225,15 +214,6 @@ const Gallery = () => {
           transition={{ duration: 0.6 }}
           className="mb-8 text-center"
         >
-          <motion.div
-            className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full border border-border bg-card/50 backdrop-blur-sm"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.2 }}
-          >
-            <Camera className="w-4 h-4 text-accent" />
-            <span className="text-sm font-medium text-muted-foreground">Photo Board</span>
-          </motion.div>
           <h2 className="text-3xl md:text-4xl mb-4">gallery</h2>
           <p className="text-muted-foreground mb-2 max-w-xl mx-auto">
             moments captured from events, hackathons, and team adventures.
@@ -267,20 +247,6 @@ const Gallery = () => {
             />
           ))}
         </div>
-
-        {/* Decorative elements */}
-        <motion.div
-          className="absolute top-1/4 left-8 w-24 h-24 border border-dashed border-accent/20 rounded-full"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ delay: 0.5 }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-8 w-16 h-16 border border-dashed border-accent/20 rounded-full"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ delay: 0.6 }}
-        />
       </div>
     </section>
   );

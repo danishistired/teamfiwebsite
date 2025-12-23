@@ -19,7 +19,17 @@ export const useLenis = () => {
     lenisRef.current = lenis;
     (window as any).lenis = lenis;
 
-    const SNAP_COOLDOWN = 400; // ms
+    const SNAP_COOLDOWN = 400;
+
+    const cancelSnap = () => {
+      if (!snappingRef.current) return;
+      snappingRef.current = false;
+      lastSnapRef.current = performance.now();
+    };
+
+    // 🔥 Cancel snap on user input
+    window.addEventListener("wheel", cancelSnap, { passive: true });
+    window.addEventListener("touchstart", cancelSnap, { passive: true });
 
     const snapToNearestSection = () => {
       if (snappingRef.current) return;
@@ -37,7 +47,8 @@ export const useLenis = () => {
 
       sections.forEach((section) => {
         const rect = section.getBoundingClientRect();
-        const sectionMiddle = rect.top + window.scrollY + rect.height / 2;
+        const sectionMiddle =
+          rect.top + window.scrollY + rect.height / 2;
         const distance = Math.abs(scrollMiddle - sectionMiddle);
 
         if (distance < minDistance) {
@@ -49,25 +60,26 @@ export const useLenis = () => {
       if (!closest) return;
 
       const target = closest.offsetTop;
-      const diff = Math.abs(window.scrollY - target);
-
-      if (diff < 6) return;
+      if (Math.abs(window.scrollY - target) < 6) return;
 
       snappingRef.current = true;
       lastSnapRef.current = now;
 
       lenis.scrollTo(target, {
         duration: 1,
-        easing: (t) => t < 0.5
-          ? 4 * t * t * t
-          : 1 - Math.pow(-2 * t + 2, 3) / 2,
-        onComplete: () => {
-          snappingRef.current = false;
-        },
+        easing: (t) =>
+          t < 0.5
+            ? 4 * t * t * t
+            : 1 - Math.pow(-2 * t + 2, 3) / 2,
       });
+
+      // 🔥 SAFETY RESET (even if interrupted)
+      setTimeout(() => {
+        snappingRef.current = false;
+      }, 1100);
     };
 
-    // 🔥 Correct scroll listener
+    // ✅ Snap only when Lenis fully stops
     lenis.on("scroll", ({ isScrolling }) => {
       if (!isScrolling) {
         snapToNearestSection();
@@ -82,6 +94,8 @@ export const useLenis = () => {
     requestAnimationFrame(raf);
 
     return () => {
+      window.removeEventListener("wheel", cancelSnap);
+      window.removeEventListener("touchstart", cancelSnap);
       lenis.destroy();
       delete (window as any).lenis;
     };
