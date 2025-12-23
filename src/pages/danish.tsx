@@ -42,7 +42,7 @@ const Danish = () => {
         </button>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          <div className="space-y-8">
+          <div className="space-y-0">
             <div>
               <p className="text-muted-foreground mb-2">{member.role}</p>
               <div style={{position: 'relative', height: '200px'}}>
