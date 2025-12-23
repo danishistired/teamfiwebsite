@@ -32,7 +32,7 @@ const ScrollNavigation = () => {
 
     const navRect = nav.getBoundingClientRect();
 
-    // Calculate nav item positions
+    // Calculate nav item positions - get left relative to nav's content area
     itemPositionsRef.current = itemsRef.current.map((item) => {
       if (!item) return { left: 0, width: 0 };
       const rect = item.getBoundingClientRect();
@@ -111,8 +111,8 @@ const ScrollNavigation = () => {
     const pillLeft = lerp(lowerPos.left, upperPos.left, t);
     const pillWidth = lerp(lowerPos.width, upperPos.width, t);
 
-    // Apply directly for smooth real-time tracking
-    pill.style.transform = `translateX(${pillLeft}px)`;
+    // Apply directly for smooth real-time tracking - use left instead of transform
+    pill.style.left = `${pillLeft}px`;
     pill.style.width = `${pillWidth}px`;
 
     // Update visibility
@@ -213,13 +213,12 @@ const ScrollNavigation = () => {
         ref={navRef}
         className="relative flex items-center gap-0.5 rounded-full border border-white/10 bg-black/70 backdrop-blur-xl px-1.5 py-1.5 shadow-2xl shadow-black/50"
       >
-        {/* Sliding pill indicator - positioned with transforms for smooth tracking */}
+        {/* Sliding pill indicator */}
         <div
           ref={pillRef}
-          className="absolute top-1 bottom-1 rounded-full bg-white/15 border border-white/20 will-change-transform"
+          className="absolute top-1 bottom-1 rounded-full bg-white/15 border border-white/20"
           style={{
-            left: 0,
-            transition: "none", // No CSS transition - controlled by RAF
+            willChange: "left, width",
           }}
         />
 
