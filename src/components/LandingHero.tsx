@@ -38,7 +38,7 @@ const LandingHero = () => {
   const shouldAnimate = !hasPlayedIntro && logoLoaded;
 
   return (
-    <section className="snap-section relative flex items-center justify-center min-h-screen overflow-hidden">
+    <section id="home" className="snap-section relative flex items-center justify-center min-h-screen overflow-hidden">
       {/* Blue-tinted overlay that fades out */}
       <motion.div
         className="absolute inset-0 bg-[hsl(220,60%,8%)] pointer-events-none z-10"
