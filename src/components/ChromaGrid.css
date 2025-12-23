@@ -59,13 +59,22 @@
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid #333;
-  transition: border-color 0.3s ease, filter 0.3s ease;
+  transition: border-color 0.4s ease, filter 0.4s ease;
   background: var(--card-gradient);
   filter: grayscale(1);
+  transform-origin: center center;
 
   --mouse-x: 50%;
   --mouse-y: 50%;
   --spotlight-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Touch device styles - no focus effect */
+@media (hover: none) {
+  .chroma-card {
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
 .chroma-card:hover {
