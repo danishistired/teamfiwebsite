@@ -45,20 +45,21 @@ const Danish = () => {
           <div className="space-y-0">
             <div>
               <p className="text-muted-foreground mb-2">{member.role}</p>
-              <div style={{position: 'relative', height: '200px'}}>
-                <TextPressure
-                  text="Danish Verma"
-                  flex={true}
-                  alpha={false}
-                  stroke={false}
-                  width={true}
-                  weight={true}
-                  italic={true}
-                  textColor="#ffffff"
-                  strokeColor="#ff0000"
-                  minFontSize={36}
-                />
-              </div>
+              <div className="relative mb-7">
+  <TextPressure
+    text="Danish Verma"
+    flex
+    alpha={false}
+    stroke={false}
+    width
+    weight
+    italic
+    textColor="#ffffff"
+    strokeColor="#ff0000"
+    minFontSize={36}
+  />
+</div>
+
             </div>
 
             <div className="space-y-6 text-muted-foreground">
@@ -75,42 +76,46 @@ const Danish = () => {
               </p>
             </div>
 
-            <div className="flex items-center gap-4 pt-4">
-              <a
-                href="https://www.linkedin.com/in/danish--verma"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-6 h-6" />
-              </a>
-              <a
-                href="https://github.com/danishistired"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="GitHub"
-              >
-                <Github className="w-6 h-6" />
-              </a>
-              <a
-                href="mailto:danishverma1116@gmail.com"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Email"
-              >
-                <Mail className="w-6 h-6" />
-              </a>
-              <a
-                href="https://danishv.me"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Website"
-              >
-                <Globe className="w-6 h-6" />
-              </a>
-            </div>
+            <div className="inline-flex items-center gap-4 pt-10">
+  <a
+    href="https://www.linkedin.com/in/danish--verma"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="LinkedIn"
+    className="text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-110"
+  >
+    <Linkedin className="w-6 h-6" />
+  </a>
+
+  <a
+    href="https://github.com/danishistired"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="GitHub"
+    className="text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-110"
+  >
+    <Github className="w-6 h-6" />
+  </a>
+
+  <a
+    href="mailto:danishverma1116@gmail.com"
+    aria-label="Email"
+    className="text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-110"
+  >
+    <Mail className="w-6 h-6" />
+  </a>
+
+  <a
+    href="https://danishv.me"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Website"
+    className="text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-110"
+  >
+    <Globe className="w-6 h-6" />
+  </a>
+</div>
+
           </div>
 
           <div className="flex justify-center items-start">

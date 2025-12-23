@@ -59,7 +59,7 @@ const ScrollNavigation = () => {
 
     const lenis = (window as any).lenis;
     if (lenis) {
-      lenis.scrollTo(target, { duration: 1.6, easing: "easeOutExpo" });
+      lenis.scrollTo(target, { duration: 2.5, easing: (t: number) => 1 - Math.pow(1 - t, 4) });
     } else {
       target.scrollIntoView({ behavior: "smooth" });
     }

@@ -4,6 +4,7 @@ import ShinyText from "./ShinyText";
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import logo from "../assets/fi.png";
+import trophyBg from "../assets/trophy4.jpg";
 
 const LandingHero = () => {
   const [imageData, setImageData] = useState<ImageData | null>(null);
@@ -39,6 +40,12 @@ const LandingHero = () => {
 
   return (
     <section id="home" className="snap-section relative flex items-center justify-center min-h-screen overflow-hidden">
+      {/* Background image with transparency */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center opacity-20"
+        style={{ backgroundImage: `url(${trophyBg})` }}
+      />
+      
       {/* Blue-tinted overlay that fades out */}
       <motion.div
         className="absolute inset-0 bg-[hsl(220,15%,2%)] pointer-events-none z-10"
@@ -49,7 +56,7 @@ const LandingHero = () => {
 
       {/* Main content with reveal animation */}
       <motion.div
-        className="scale-125 origin-center -translate-y-9"
+        className="scale-125 origin-center -translate-y-9 relative z-20"
         initial={{ 
           opacity: hasPlayedIntro ? 1 : 0, 
           scale: hasPlayedIntro ? 1 : 0.96,
@@ -113,7 +120,7 @@ const LandingHero = () => {
 
       {/* Scroll indicator */}
       <motion.div 
-        className="absolute bottom-12 flex items-center gap-2 text-muted-foreground text-sm"
+        className="absolute bottom-12 flex items-center gap-2 text-muted-foreground text-sm z-20"
         initial={{ opacity: hasPlayedIntro ? 1 : 0, y: hasPlayedIntro ? 0 : 20 }}
         animate={{ opacity: logoLoaded ? 1 : 0, y: logoLoaded ? 0 : 20 }}
         transition={{ duration: 0.8, delay: shouldAnimate ? 1 : 0 }}
