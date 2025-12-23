@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './ChromaGrid.css';
@@ -39,10 +39,24 @@ export const ChromaGrid: React.FC<ChromaGridProps> = ({
 }) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Map<number, HTMLElement>>(new Map());
   const setX = useRef<SetterFn | null>(null);
   const setY = useRef<SetterFn | null>(null);
   const pos = useRef({ x: 0, y: 0 });
   const navigate = useNavigate();
+  
+  // Track which card is hovered (-1 means none)
+  const [hoveredIndex, setHoveredIndex] = useState<number>(-1);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  // Detect touch device
+  useEffect(() => {
+    const checkTouch = () => {
+      setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    };
+    checkTouch();
+    window.addEventListener('touchstart', () => setIsTouchDevice(true), { once: true });
+  }, []);
 
   const demo: ChromaItem[] = [
     {
@@ -113,6 +127,47 @@ export const ChromaGrid: React.FC<ChromaGridProps> = ({
     setY.current(pos.current.y);
   }, []);
 
+  // Animate cards based on hover state
+  useEffect(() => {
+    if (isTouchDevice) return;
+    
+    cardRefs.current.forEach((card, index) => {
+      if (!card) return;
+      
+      if (hoveredIndex === -1) {
+        // No card hovered - reset all
+        gsap.to(card, {
+          scale: 1,
+          y: 0,
+          opacity: 1,
+          duration: 0.4,
+          ease: 'power2.out',
+          overwrite: true
+        });
+      } else if (index === hoveredIndex) {
+        // This card is hovered - lift and scale up
+        gsap.to(card, {
+          scale: 1.03,
+          y: -8,
+          opacity: 1,
+          duration: 0.4,
+          ease: 'power2.out',
+          overwrite: true
+        });
+      } else {
+        // Other cards - scale down and fade slightly
+        gsap.to(card, {
+          scale: 0.97,
+          y: 0,
+          opacity: 0.65,
+          duration: 0.4,
+          ease: 'power2.out',
+          overwrite: true
+        });
+      }
+    });
+  }, [hoveredIndex, isTouchDevice]);
+
   const moveTo = (x: number, y: number) => {
     gsap.to(pos.current, {
       x,
@@ -139,18 +194,16 @@ export const ChromaGrid: React.FC<ChromaGridProps> = ({
       duration: fadeOut,
       overwrite: true
     });
+    setHoveredIndex(-1);
   };
 
   const handleCardClick = (url?: string) => {
     if (url) {
       if (url.startsWith('/')) {
-        // Internal route - use React Router navigation in same tab
         navigate(url);
       } else if (url.startsWith('http')) {
-        // External URL - open in new tab
         window.open(url, '_blank', 'noopener,noreferrer');
       } else {
-        // Fallback - treat as internal
         navigate(url);
       }
     }
@@ -164,6 +217,14 @@ export const ChromaGrid: React.FC<ChromaGridProps> = ({
     card.style.setProperty('--mouse-x', `${x}px`);
     card.style.setProperty('--mouse-y', `${y}px`);
   };
+
+  const setCardRef = useCallback((index: number) => (el: HTMLElement | null) => {
+    if (el) {
+      cardRefs.current.set(index, el);
+    } else {
+      cardRefs.current.delete(index);
+    }
+  }, []);
 
   return (
     <div
@@ -182,14 +243,18 @@ export const ChromaGrid: React.FC<ChromaGridProps> = ({
       {data.map((c, i) => (
         <article
           key={i}
+          ref={setCardRef(i)}
           className="chroma-card"
           onMouseMove={handleCardMove}
+          onMouseEnter={() => !isTouchDevice && setHoveredIndex(i)}
+          onMouseLeave={() => !isTouchDevice && setHoveredIndex(-1)}
           onClick={() => handleCardClick(c.url)}
           style={
             {
               '--card-border': c.borderColor || 'transparent',
               '--card-gradient': c.gradient,
-              cursor: c.url ? 'pointer' : 'default'
+              cursor: c.url ? 'pointer' : 'default',
+              willChange: 'transform, opacity'
             } as React.CSSProperties
           }
         >
