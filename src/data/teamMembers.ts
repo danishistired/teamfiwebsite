@@ -49,7 +49,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: "ankit",
     name: "Ankit Kumar",
-    role: "type-c cable",
+    role: "bada aadmi",
     image: ankitPhoto, // Replace with: ankitPhoto
     bio: [
       "keeps systems running smoothly with automation and monitoring. expert in cloud infrastructure and ci/cd pipelines.",

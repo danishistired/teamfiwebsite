@@ -1,53 +1,59 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useMotionValue, useSpring, PanInfo } from "motion/react";
 import { MapPin } from "lucide-react";
+import pic1 from "../assets/gallery/me.jpg";
+import pic2 from "../assets/gallery/menvarun.jpg";
+import pic3 from "../assets/gallery/pic3.jpg"
+import pic4 from "../assets/gallery/pic4.jpg"
+import pic5 from "../assets/gallery/pic5.jpg"
+import pic6 from "../assets/gallery/pic6.jpg"
 
 const galleryImages = [
   {
     id: 1,
-    src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
-    event: "Hackathon 2024",
-    location: "Tech Hub",
+    src: pic3,
+    event: "CU AI Hacksprint",
+    location: "Chandigarh University",
     rotation: -12,
     scale: 1.1,
   },
   {
     id: 2,
-    src: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80",
-    event: "Conference Talk",
-    location: "Dev Summit",
+    src: pic4,
+    event: "FOSSHack 2025",
+    location: "UIET Panjab University",
     rotation: 8,
     scale: 0.95,
   },
   {
     id: 3,
-    src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80",
-    event: "Team Meetup",
-    location: "Office",
+    src: pic5,
+    event: "Random",
+    location: "Cafeteria",
     rotation: -5,
     scale: 1,
   },
   {
     id: 4,
-    src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&q=80",
-    event: "Award Ceremony",
-    location: "Grand Hall",
+    src: pic2,
+    event: "SIH 2025",
+    location: "Chandigarh University",
     rotation: 15,
     scale: 1.05,
   },
   {
     id: 5,
-    src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
-    event: "Workshop",
-    location: "Innovation Lab",
+    src: pic6,
+    event: "SIH 2025",
+    location: "Chandigarh University",
     rotation: -8,
     scale: 0.9,
   },
   {
     id: 6,
-    src: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
-    event: "Planning Session",
-    location: "Workspace",
+    src: pic1,
+    event: "CipherHunt 2.0",
+    location: "Chandigarh University",
     rotation: 10,
     scale: 1,
   },
@@ -68,13 +74,18 @@ const DraggablePhoto = ({ image, index, isInView, bringToFront, zIndex, containe
   
   // Initial scattered positions
   const positions = [
-    { x: -180, y: -120 },
-    { x: 150, y: -80 },
-    { x: -100, y: 80 },
-    { x: 200, y: 100 },
-    { x: -200, y: 0 },
-    { x: 100, y: -150 },
-  ];
+  // Top row
+  { x: -220, y: -160 }, // top-left
+  { x: 0,    y: -180 }, // top-center
+  { x: 220,  y: -160 }, // top-right
+
+  // Bottom row
+  { x: -180, y: 140 },  // bottom-left
+  { x: 0,    y: 180 },  // bottom-center
+  { x: 180,  y: 140 },  // bottom-right
+];
+
+
 
   const x = useMotionValue(positions[index % positions.length].x);
   const y = useMotionValue(positions[index % positions.length].y);
@@ -216,7 +227,7 @@ const Gallery = () => {
         >
           <h2 className="text-3xl md:text-4xl mb-4">gallery</h2>
           <p className="text-muted-foreground mb-2 max-w-xl mx-auto">
-            moments captured from events, hackathons, and team adventures.
+            moments that prove our existence, beyond just a screen.
           </p>
           <p className="text-xs text-accent">drag the photos around!</p>
         </motion.div>

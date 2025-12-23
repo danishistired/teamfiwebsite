@@ -23,13 +23,6 @@ const Index = () => {
         <Achievements />
         <Contact />
       </main>
-      <footer className="snap-section flex items-center py-8 border-t border-border min-h-[30vh]">
-        <div className="container">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Team Fi
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };

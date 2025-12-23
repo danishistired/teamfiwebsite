@@ -4,31 +4,31 @@ import { motion, useInView } from "motion/react";
 const achievements = [
   {
     focal: "1st",
-    title: "Regional Hackathon",
-    impact: "Built a real-time collaboration platform under 48-hour pressure. Judged across 50+ teams on innovation, execution, and technical depth.",
+    title: "CU AI Hacksprint",
+    impact: "Built an AI-powered alumni networking platform that connects graduates with students for mentorship and job opportunities.",
     context: "48 hrs · 50+ teams",
-    year: "2024",
+    year: "2025",
   },
   {
-    focal: "Core",
-    title: "Open Source Contributor",
-    impact: "Accepted contributions to production infrastructure serving millions. Code reviewed by maintainers of top-tier projects.",
-    context: "Production-grade patches",
-    year: "2023",
+    focal: "2nd",
+    title: "CipherHunt 2.0",
+    impact: "A 24 hour Capture The Flag competition.",
+    context: "48 hours · 200+ participants",
+    year: "2025",
   },
   {
-    focal: "Top 10",
-    title: "National CTF",
-    impact: "Ranked in the top percentile of a national cybersecurity competition. Solved complex reverse engineering and cryptography challenges.",
-    context: "Nationwide · Security",
-    year: "2023",
+    focal: "Top 7",
+    title: "CodeForge 25'",
+    impact: "Ranked in the top 7 in a 3 round hackathon, happened at Microsoft, Gurugram.",
+    context: "720+ teams · Microsoft",
+    year: "2025",
   },
   {
-    focal: "Merit",
-    title: "Academic Excellence",
-    impact: "Recognized for outstanding performance in advanced technical coursework. Maintained distinction across systems and theory.",
-    context: "Scholarship recipient",
-    year: "2022",
+    focal: "Soon",
+    title: "still thriving for more",
+    impact: "",
+    context: "",
+    year: "",
   },
 ];
 
@@ -57,10 +57,20 @@ const AchievementCard = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       <motion.div
-        className="relative bg-card border border-border rounded-2xl overflow-hidden cursor-default"
+        className="
+          relative 
+          bg-card 
+          border border-border 
+          rounded-2xl 
+          overflow-hidden 
+          cursor-default
+          h-[200px] sm:h-[250px] lg:h-[270px]
+        "
         animate={{
           y: isHovered ? -8 : 0,
-          borderColor: isHovered ? "hsl(var(--accent) / 0.3)" : "hsl(var(--border))",
+          borderColor: isHovered
+            ? "hsl(var(--accent) / 0.3)"
+            : "hsl(var(--border))",
         }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         style={{
@@ -69,42 +79,35 @@ const AchievementCard = ({
             : "0 4px 20px -4px hsl(var(--background) / 0.5)",
         }}
       >
-        {/* Glow effect on hover */}
+        {/* Hover glow */}
         <motion.div
           className="absolute inset-0 pointer-events-none"
-          animate={{
-            opacity: isHovered ? 1 : 0,
-          }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.4 }}
           style={{
-            background: "radial-gradient(ellipse at top, hsl(var(--accent) / 0.08) 0%, transparent 60%)",
+            background:
+              "radial-gradient(ellipse at top, hsl(var(--accent) / 0.08) 0%, transparent 60%)",
           }}
         />
 
-        <div className="relative p-6 md:p-8">
-          {/* Header row */}
-          <div className="flex items-start justify-between mb-6">
-            {/* Focal element - the rank/position */}
+        {/* CONTENT */}
+        <div className="relative p-5 md:p-6 flex flex-col h-full">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-4">
             <motion.div
-              className="relative"
-              animate={{
-                scale: isHovered ? 1.02 : 1,
-              }}
+              animate={{ scale: isHovered ? 1.02 : 1 }}
               transition={{ duration: 0.3 }}
             >
-              <span className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-foreground leading-none">
+              <span className="text-4xl md:text-5xl font-black tracking-tighter leading-none">
                 {achievement.focal}
               </span>
-              {/* Subtle underline accent */}
               <motion.div
-                className="absolute -bottom-1 left-0 h-1 bg-accent/60 rounded-full"
-                initial={{ width: 0 }}
+                className="h-1 bg-accent/60 rounded-full mt-1"
                 animate={{ width: isHovered ? "100%" : "30%" }}
                 transition={{ duration: 0.4 }}
               />
             </motion.div>
 
-            {/* Year badge */}
             <span className="text-xs font-mono text-muted-foreground bg-secondary/50 px-2 py-1 rounded">
               {achievement.year}
             </span>
@@ -112,41 +115,43 @@ const AchievementCard = ({
 
           {/* Title */}
           <motion.h3
-            className="text-xl md:text-2xl font-semibold text-foreground mb-3"
-            animate={{
-              x: isHovered ? 4 : 0,
-            }}
+            className="text-lg md:text-xl font-semibold mb-2"
+            animate={{ x: isHovered ? 4 : 0 }}
             transition={{ duration: 0.3 }}
           >
             {achievement.title}
           </motion.h3>
 
-          {/* Impact description */}
+          {/* Description (clamped) */}
           <motion.p
-            className="text-sm md:text-base text-muted-foreground leading-relaxed mb-4"
-            animate={{
-              opacity: isHovered ? 1 : 0.8,
-            }}
+            className="
+              text-sm 
+              text-muted-foreground 
+              leading-relaxed 
+              line-clamp-3
+            "
+            animate={{ opacity: isHovered ? 1 : 0.8 }}
             transition={{ duration: 0.3 }}
           >
             {achievement.impact}
           </motion.p>
 
-          {/* Context tag */}
-          <div className="flex items-center gap-2">
+          {/* Footer pinned to bottom */}
+          <div className="mt-auto pt-4 flex items-center gap-2">
             <div className="h-px flex-1 bg-border" />
-            <span className="text-xs text-accent/80 font-medium">
+            <span className="text-xs text-accent/80 font-medium whitespace-nowrap">
               {achievement.context}
             </span>
           </div>
         </div>
 
-        {/* Bottom edge gradient */}
+        {/* Bottom accent */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
       </motion.div>
     </motion.div>
   );
 };
+
 
 const Achievements = () => {
   const containerRef = useRef<HTMLDivElement>(null);

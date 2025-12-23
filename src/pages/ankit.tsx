@@ -16,8 +16,8 @@ const Ankit = () => {
     role: "product designer",
     image: "",
     bio: [
-      "bridges the gap between user needs and technical implementation. focused on accessible, inclusive design.",
-      "believes good design is invisible — it just works.",
+      "isne bhi nahi bheja",
+      
     ],
   };
 
@@ -46,7 +46,7 @@ const Ankit = () => {
 
               <p>
                 want to connect?{" "}
-                <a href="/#contact" className="text-accent hover:underline">
+                <a href="https://www.linkedin.com/in/ankit-kumar3323?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" className="text-accent hover:underline">
                   reach out
                 </a>
                 .
@@ -93,7 +93,7 @@ const Ankit = () => {
               showUserInfo={true}
               enableTilt={true}
               enableMobileTilt={false}
-              onContactClick={() => window.location.href = "/#contact"}
+              onContactClick={() => window.location.href = "https://www.linkedin.com/in/ankit-kumar3323?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"}
             />
           </div>
         </div>

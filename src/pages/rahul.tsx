@@ -46,7 +46,7 @@ const Rahul = () => {
 
               <p>
                 want to connect?{" "}
-                <a href="/#contact" className="text-accent hover:underline">
+                <a href="https://www.linkedin.com/in/rahul-jaluthria-629101321/" className="text-accent hover:underline">
                   reach out
                 </a>
                 .

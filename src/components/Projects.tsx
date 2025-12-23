@@ -4,29 +4,29 @@ import { motion, useInView } from "motion/react";
 
 const projects = [
   {
-    title: "distributed cache",
-    description: "high-performance caching layer for microservices with automatic sharding and failover",
-    stack: ["go", "redis", "grpc"],
+    title: "GradNet",
+    description: "a centralised platform connecting alumni and students.",
+    stack: ["tailwind", "react", "firebase"],
     link: "#",
     number: "01",
   },
   {
-    title: "auth gateway",
-    description: "zero-trust authentication service with oauth2 and mfa support",
-    stack: ["rust", "postgresql", "jwt"],
+    title: "Ecomitra",
+    description: "a garbage logging system with both a web and mobile app.",
+    stack: ["flutter", "firebase", "jwt"],
     link: "#",
     number: "02",
   },
   {
-    title: "static site generator",
-    description: "minimal markdown-based static site builder with hot reload",
-    stack: ["typescript", "node", "markdown"],
+    title: "Plansify",
+    description: "a mobile app for students to manage, record and share their study schedules.",
+    stack: ["flutter", "dart"],
     link: "#",
     number: "03",
   },
   {
-    title: "monitoring dashboard",
-    description: "real-time metrics visualization for infrastructure health",
+    title: "EDZO",
+    description: "an app that connects teachers and students beyond classrooms, engaging them in AI generated activites to keep them sharp and engaged",
     stack: ["react", "d3", "websockets"],
     link: "#",
     number: "04",
@@ -49,7 +49,7 @@ const Projects = () => {
         >
           <h2 className="text-2xl mb-4">projects</h2>
           <p className="text-muted-foreground max-w-xl">
-            things we've built together — from internal tools to open source contributions.
+            things we've built together, under heavy influence of caffeine.
           </p>
         </motion.div>
         
@@ -156,7 +156,7 @@ const Projects = () => {
           className="mt-12 flex justify-center"
         >
           <a
-            href="#"
+            href="https://github.com/danishistired"
             className="group inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
           >
             <Github className="w-4 h-4" />

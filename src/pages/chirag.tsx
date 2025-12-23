@@ -16,8 +16,7 @@ const chirag = () => {
     role: "frontend engineer",
     image: "",
     bio: [
-      "focused on creating intuitive interfaces and smooth user experiences. believes in the power of thoughtful design.",
-      "enjoys working at the intersection of design and engineering.",
+      "around for comedic purpose only.",
     ],
   };
 
@@ -46,7 +45,7 @@ const chirag = () => {
 
               <p>
                 want to connect?{" "}
-                <a href="/#contact" className="text-accent hover:underline">
+                <a href="https://www.linkedin.com/in/chirag-xbit/" className="text-accent hover:underline">
                   reach out
                 </a>
                 .
@@ -93,7 +92,7 @@ const chirag = () => {
               showUserInfo={true}
               enableTilt={true}
               enableMobileTilt={false}
-              onContactClick={() => window.location.href = "/#contact"}
+              onContactClick={() => window.location.href = "https://www.linkedin.com/in/chirag-xbit/"}
             />
           </div>
         </div>

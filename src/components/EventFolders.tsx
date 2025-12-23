@@ -248,7 +248,7 @@ const EventFolders = () => {
 
   return (
     <>
-      <section id="events" className="snap-section flex items-center py-24 border-t border-border">
+      <section id="archive" className="snap-section flex items-center py-24 border-t border-border">
         <div className="container" ref={containerRef}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -256,24 +256,25 @@ const EventFolders = () => {
             transition={{ duration: 0.6 }}
             className="mb-16"
           >
-            <h2 className="text-2xl mb-4">gallery</h2>
+            <h2 className="text-2xl mb-4">archive</h2>
             <p className="text-muted-foreground max-w-md">
               a quiet archive of moments that matter.
             </p>
           </motion.div>
 
-          {/* Folder grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {eventFolders.map((folder, index) => (
-              <FolderCard
-                key={folder.id}
-                folder={folder}
-                index={index}
-                isInView={isInView}
-                onClick={() => setSelectedFolder(folder)}
-              />
-            ))}
-          </div>
+          {/* Placeholder message */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex items-center justify-center min-h-[400px]"
+          >
+            <div className="text-center max-w-lg">
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                still compiling all the pictures and videos. i'll update them as soon as possible
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 

@@ -13,11 +13,11 @@ const varun = () => {
   const member = {
     id: "varun",
     name: "Varun Gupta",
-    role: "security researcher",
+    role: "morral support",
     image: "",
     bio: [
-      "dedicated to finding and fixing vulnerabilities before they become problems. experienced in penetration testing and secure code review.",
-      "active participant in ctf competitions and open source security tools.",
+      "bheja nahi abhi tak",
+      "bhosdika",
     ],
   };
 
@@ -46,7 +46,7 @@ const varun = () => {
 
               <p>
                 want to connect?{" "}
-                <a href="/#contact" className="text-accent hover:underline">
+                <a href="https://www.linkedin.com/in/varun-gupta-17757b322/" className="text-accent hover:underline">
                   reach out
                 </a>
                 .
@@ -93,7 +93,7 @@ const varun = () => {
               showUserInfo={true}
               enableTilt={true}
               enableMobileTilt={false}
-              onContactClick={() => window.location.href = "/#contact"}
+              onContactClick={() => window.location.href = "https://www.linkedin.com/in/varun-gupta-17757b322/"}
             />
           </div>
         </div>

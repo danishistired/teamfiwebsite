@@ -18,8 +18,8 @@ const Danish = () => {
     role: "lead developer/ leader",
     image: "",
     bio: [
-      "awd in systems architecture and backend development. passionate about building scalable, reliable infrastructure.",
-      "interests include distributed systems, performance optimization, and security.",
+      "i do everything, from builing apps, websites, traning ai models, hacking machines to leading the team. without me we wouldn't exist.",
+      "but if you were to ask me how i do it, i probably wouldn't know so don't ask me.",
     ],
   };
 
@@ -69,7 +69,7 @@ const Danish = () => {
 
               <p>
                 want to connect?{" "}
-                <a href="/#contact" className="text-accent hover:underline">
+                <a href="https://www.linkedin.com/in/danish--verma" className="text-accent hover:underline">
                   reach out
                 </a>
                 .

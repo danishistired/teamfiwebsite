@@ -1,6 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import MetallicPaint, { parseLogoImage } from "./MetallicPaint";
 import ShinyText from "./ShinyText";
+import TextType from "./TextType";
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import logo from "../assets/fi.png";
@@ -74,20 +75,26 @@ const LandingHero = () => {
         }}
       >
         <div className="flex flex-col items-center">
-          {/* we are */}
-          <motion.p 
-            className="mb-3 text-sm md:text-base text-muted-foreground text-center"
+          {/* we are / i am */}
+          <motion.div
+            className="mb-3 text-base md:text-lg lg:text-xl text-foreground text-center"
             initial={{ opacity: hasPlayedIntro ? 1 : 0, y: hasPlayedIntro ? 0 : 10 }}
             animate={{ opacity: logoLoaded ? 1 : 0, y: logoLoaded ? 0 : 10 }}
             transition={{ duration: 0.8, delay: shouldAnimate ? 0.4 : 0 }}
           >
-            we are
-          </motion.p>
+            <TextType 
+              text={["we are", "i am"]}
+              typingSpeed={30}
+              pauseDuration={2000}
+              showCursor={true}
+              cursorCharacter="|"
+            />
+          </motion.div>
 
           {/* Team Fi + Φ */}
           <div className="flex items-end gap-3 md:gap-4 lg:gap-5">
             <motion.h1 
-              className="font-semibold tracking-tight text-5xl md:text-7xl lg:text-8xl leading-none"
+              className="font-bold tracking-tight text-5xl md:text-7xl lg:text-8xl leading-none"
               initial={{ opacity: hasPlayedIntro ? 1 : 0, y: hasPlayedIntro ? 0 : 20 }}
               animate={{ opacity: logoLoaded ? 1 : 0, y: logoLoaded ? 0 : 20 }}
               transition={{ duration: 0.8, delay: shouldAnimate ? 0.5 : 0 }}
