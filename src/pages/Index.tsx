@@ -2,6 +2,7 @@ import ScrollNavigation from "@/components/ScrollNavigation";
 import LandingHero from "@/components/LandingHero";
 import TeamSection from "@/components/TeamSection";
 import Projects from "@/components/Projects";
+import Gallery from "@/components/Gallery";
 import EventFolders from "@/components/EventFolders";
 import Achievements from "@/components/Achievements";
 import Contact from "@/components/Contact";
@@ -17,6 +18,7 @@ const Index = () => {
         <LandingHero />
         <TeamSection />
         <Projects />
+        <Gallery />
         <EventFolders />
         <Achievements />
         <Contact />

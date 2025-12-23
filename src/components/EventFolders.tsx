@@ -248,7 +248,7 @@ const EventFolders = () => {
 
   return (
     <>
-      <section id="gallery" className="snap-section flex items-center py-24 border-t border-border">
+      <section id="events" className="snap-section flex items-center py-24 border-t border-border">
         <div className="container" ref={containerRef}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
