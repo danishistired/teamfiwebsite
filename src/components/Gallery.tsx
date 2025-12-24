@@ -68,28 +68,32 @@ interface DraggablePhotoProps {
   containerBounds: DOMRect | null;
 }
 
-const DraggablePhoto = ({ image, index, isInView, bringToFront, zIndex, containerBounds }: DraggablePhotoProps) => {
+const DraggablePhoto = ({
+  image,
+  index,
+  isInView,
+  bringToFront,
+  zIndex,
+  containerBounds,
+}: DraggablePhotoProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  
+
+  const photoRef = useRef<HTMLDivElement>(null);
+
   // Initial scattered positions
   const positions = [
-  // Top row
-  { x: -220, y: -160 }, // top-left
-  { x: 0,    y: -180 }, // top-center
-  { x: 220,  y: -160 }, // top-right
-
-  // Bottom row
-  { x: -180, y: 140 },  // bottom-left
-  { x: 0,    y: 180 },  // bottom-center
-  { x: 180,  y: 140 },  // bottom-right
-];
-
-
+    { x: -220, y: -160 },
+    { x: 0, y: -180 },
+    { x: 220, y: -160 },
+    { x: -180, y: 140 },
+    { x: 0, y: 180 },
+    { x: 180, y: 140 },
+  ];
 
   const x = useMotionValue(positions[index % positions.length].x);
   const y = useMotionValue(positions[index % positions.length].y);
-  
+
   const springConfig = { stiffness: 300, damping: 30 };
   const springX = useSpring(x, springConfig);
   const springY = useSpring(y, springConfig);
@@ -99,97 +103,95 @@ const DraggablePhoto = ({ image, index, isInView, bringToFront, zIndex, containe
     bringToFront(image.id);
   };
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = () => {
     setIsDragging(false);
-    x.set(x.get() + info.offset.x);
-    y.set(y.get() + info.offset.y);
   };
+
+  // ✅ Calculate drag constraints dynamically
+  const dragConstraints = (() => {
+  if (!containerBounds || !photoRef.current) return false;
+
+  const photoRect = photoRef.current.getBoundingClientRect();
+
+  // 👇 Increase this value to allow more freedom
+  const PADDING = 200; // px (try 80–200)
+
+  return {
+    left: -containerBounds.width / 2 + photoRect.width / 2 - PADDING,
+    right: containerBounds.width / 2 - photoRect.width / 2 + PADDING,
+    top: -containerBounds.height / 2 + photoRect.height / 2 - PADDING,
+    bottom: containerBounds.height / 2 - photoRect.height / 2 + PADDING,
+  };
+})();
+
 
   return (
     <motion.div
+      ref={photoRef}
       className="absolute cursor-grab active:cursor-grabbing"
       style={{
         x: springX,
         y: springY,
         zIndex,
       }}
-      initial={{ 
-        opacity: 0, 
+      initial={{
+        opacity: 0,
         scale: 0,
         rotate: image.rotation * 2,
       }}
-      animate={isInView ? { 
-        opacity: 1, 
-        scale: image.scale,
-        rotate: isDragging ? 0 : image.rotation,
-      } : {}}
+      animate={
+        isInView
+          ? {
+              opacity: 1,
+              scale: image.scale,
+              rotate: isDragging ? 0 : image.rotation,
+            }
+          : {}
+      }
       transition={{
         opacity: { delay: 0.1 + index * 0.08, duration: 0.4 },
         scale: { delay: 0.1 + index * 0.08, duration: 0.5, type: "spring" },
         rotate: { type: "spring", stiffness: 200 },
       }}
       drag
+      dragConstraints={dragConstraints} // ✅ HARD LIMIT
+      dragElastic={0.08}
       dragMomentum={false}
-      dragElastic={0.1}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       whileDrag={{ scale: 1.1, rotate: 0 }}
     >
-      {/* Polaroid-style photo */}
+      {/* Polaroid */}
       <motion.div
         className="relative bg-foreground p-2 pb-12 rounded-sm"
-        style={{
-          boxShadow: isDragging 
-            ? "0 30px 60px -12px rgba(0,0,0,0.5), 0 18px 36px -18px rgba(0,0,0,0.4)"
-            : "0 10px 30px -10px rgba(0,0,0,0.3), 0 6px 12px -6px rgba(0,0,0,0.2)",
-        }}
-        animate={{
-          y: isHovered && !isDragging ? -8 : 0,
-        }}
+        animate={{ y: isHovered && !isDragging ? -8 : 0 }}
         transition={{ type: "spring", stiffness: 400 }}
       >
-        {/* Photo */}
         <div className="relative w-48 h-48 md:w-56 md:h-56 overflow-hidden bg-muted">
           <motion.img
             src={image.src}
             alt={image.event}
             className="w-full h-full object-cover"
-            animate={{
-              scale: isHovered ? 1.05 : 1,
-            }}
+            animate={{ scale: isHovered ? 1.05 : 1 }}
             transition={{ duration: 0.3 }}
             draggable={false}
           />
-          
-          {/* Hover overlay */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent flex flex-col justify-end p-3"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="flex items-center gap-1.5 text-foreground text-xs">
-              <MapPin className="w-3 h-3" />
-              <span>{image.location}</span>
-            </div>
-          </motion.div>
         </div>
 
-        {/* Caption area */}
         <div className="absolute bottom-2 left-2 right-2">
           <p className="text-background text-sm font-medium truncate">
             {image.event}
           </p>
         </div>
 
-        {/* Tape effect */}
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-12 h-6 bg-accent/30 backdrop-blur-sm rounded-sm rotate-1" />
       </motion.div>
     </motion.div>
   );
 };
+
 
 const Gallery = () => {
   const containerRef = useRef<HTMLDivElement>(null);
